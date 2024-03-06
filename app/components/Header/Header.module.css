@@ -40,6 +40,11 @@
   width: 100%;
 }
 
+.menu__link_active {
+  background-color: #ffff00;
+  pointer-events: none;
+} 
+
 .menu__link {
   font-family: 'Rubic One', sans-serif;
   display: flex;

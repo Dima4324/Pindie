@@ -1,6 +1,6 @@
 import Styles from './AuthForm.module.css';
 
-export const AuthForm = () => {
+export const AuthForm = (props) => {
   return (
     <form className={Styles['form']}>
       <h2 className={Styles['form__title']}>Авторизация</h2>

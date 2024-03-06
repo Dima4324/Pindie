@@ -1,6 +1,6 @@
 import { CardList } from "../components/CardsList/CardList"
 import { getGamesByCategory } from "../data/data-utils"
-export default function New() {
+export default function PixelGames() {
     const newGames = getGamesByCategory("pixel")
     return (
         <main>
