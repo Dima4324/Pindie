@@ -3,13 +3,15 @@ import Styles from "./Header.module.css";
 import { Popup } from "../Popup/Popup";
 import { Overlay } from "../Overlay/Overlay";
 import { AuthForm } from "../AuthForm/AuthForm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-export const Header = (props) => {
+import { endpoints } from "../../api/config";
+import { getJWT, removeJWT, getMe, isResponseOk } from "../../api/api-utils";
+export const Header = () => {
   const pathname = usePathname();
 
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [popupIsOpened, setPopupIsOpened] = useState(false);
 
   const openPopup = () => {
@@ -18,6 +20,25 @@ export const Header = (props) => {
 
   const closePopup = () => {
     setPopupIsOpened(false);
+  };
+
+  useEffect(() => {
+    const jwt = getJWT();
+    if (jwt) {
+      getMe(endpoints.me, jwt).then((userData) => {
+        if (isResponseOk(userData)) {
+          setIsAuthorized(true);
+        } else {
+          setIsAuthorized(false);
+          removeJWT();
+        }
+      });
+    }
+  }, []);
+
+  const handleLogout = () => {
+    setIsAuthorized(false);
+    removeJWT();
   };
 
   return (
@@ -101,14 +122,18 @@ export const Header = (props) => {
           </li>
         </ul>
         <div className={Styles["auth"]}>
-          <button className={Styles["auth__button"]} onClick={openPopup}>
-            Войти
-          </button>
+          {isAuthorized ? (
+            <button className={Styles["auth__button"]} onClick={handleLogout}>Выйти</button>
+          ) : (
+            <button className={Styles["auth__button"]} onClick={openPopup}>
+              Войти
+            </button>
+          )}
         </div>
       </nav>
-      <Overlay isOpened={popupIsOpened} closePopup={closePopup}/>
+      <Overlay isOpened={popupIsOpened} closePopup={closePopup} />
       <Popup isOpened={popupIsOpened} сlosePopup={closePopup}>
-        <AuthForm />
+        <AuthForm close={closePopup} setAuth={setIsAuthorized} />
       </Popup>
     </header>
   );

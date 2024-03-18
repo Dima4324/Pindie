@@ -1,10 +1,11 @@
+import { getNormalizedGamesDataByCategory } from "../api/api-utils"
+import { endpoints } from "../api/config"
 import { CardList } from "../components/CardsList/CardList"
-import { getGamesByCategory } from "../data/data-utils"
-export default function Popular() {
-    const newGames = getGamesByCategory("popular")
+export default async function Popular() {
+    const popularGames = await getNormalizedGamesDataByCategory(endpoints.games, "popular")
     return (
         <main>
-            <CardList id="popular" title="Популярные" data={newGames}/>
+            <CardList id="popular" title="Популярные" data={popularGames}/>
         </main>
     )
 }
