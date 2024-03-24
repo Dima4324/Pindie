@@ -1,11 +1,13 @@
 import Styles from "./AuthForm.module.css";
 import { useState, useEffect } from "react";
-import { isResponseOk, authorize, setJWT } from "../../api/api-utils";
+import { useStore } from "@/app/store/app-store"; 
+import { isResponseOk, authorize } from "../../api/api-utils";
 import { endpoints } from "../../api/config";
 export const AuthForm = (props) => {
   const [authData, setAuthData] = useState({ identifier: "", password: "" });
-  const [userData, setUserData] = useState(null);
   const [message, setMessage] = useState({ status: null, text: null });
+
+  const authContext = useStore();
 
   const handleInput = (e) => {
     setAuthData({ ...authData, [e.target.name]: e.target.value });
@@ -17,10 +19,7 @@ export const AuthForm = (props) => {
     const userData = await authorize(endpoints.auth, authData);
 
     if (isResponseOk(userData)) {
-      setJWT(userData.jwt)
-      setUserData(userData);
-
-      props.setAuth(true);
+      authContext.login(userData.user, userData.jwt);
 
       setMessage({ status: "success", text: "Вы авторизовались!" });
     } else {
@@ -30,13 +29,13 @@ export const AuthForm = (props) => {
 
   useEffect(() => {
     let timer;
-    if (userData) {
+    if (authContext.user) {
       timer = setTimeout(() => {
         props.close();
       }, 1000);
     }
     return () => clearTimeout(timer);
-  }, [userData]);
+  }, [authContext.user]);
 
   return (
     <form className={Styles["form"]} onSubmit={handleSubmit}>
