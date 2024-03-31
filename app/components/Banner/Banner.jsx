@@ -5,7 +5,7 @@ export const Banner = () => {
     <section className={Styles.banner}>
       <div className={Styles["banner__description"]}>
         <h1 className={Styles["banner__title"]}>
-          Портал инди-игр от&nbsp;студентов Яндекс Практикума
+          Портал инди-игр от студентов Яндекс Практикума
         </h1>
         <div className={Styles["banner__text-block"]}>
           <p className={Styles["banner__text"]}>
