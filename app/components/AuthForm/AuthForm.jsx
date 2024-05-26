@@ -1,10 +1,10 @@
 import Styles from "./AuthForm.module.css";
 import { useState, useEffect } from "react";
-import { useStore } from "@/app/store/app-store"; 
+import { useStore } from "@/app/store/app-store";
 import { isResponseOk, authorize } from "../../api/api-utils";
 import { endpoints } from "../../api/config";
 export const AuthForm = (props) => {
-  const [authData, setAuthData] = useState({ identifier: "", password: "" });
+  const [authData, setAuthData] = useState({ email: "", password: "" });
   const [message, setMessage] = useState({ status: null, text: null });
 
   const authContext = useStore();
@@ -17,9 +17,9 @@ export const AuthForm = (props) => {
     e.preventDefault();
 
     const userData = await authorize(endpoints.auth, authData);
-
+    console.log(userData)
     if (isResponseOk(userData)) {
-      authContext.login(userData.user, userData.jwt);
+      authContext.login({ ...userData, id: userData._id }, userData.jwt);
 
       setMessage({ status: "success", text: "Вы авторизовались!" });
     } else {
@@ -44,11 +44,11 @@ export const AuthForm = (props) => {
         <label className={Styles["form__field"]}>
           <span className={Styles["form__field-title"]}>Email</span>
           <input
+            onInput={handleInput}
             className={Styles["form__field-input"]}
-            name="identifier"
+            name="email"
             type="email"
             placeholder="hello@world.com"
-            onInput={handleInput}
           />
         </label>
         <label className={Styles["form__field"]}>

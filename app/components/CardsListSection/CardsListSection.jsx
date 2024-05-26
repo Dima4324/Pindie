@@ -3,7 +3,6 @@ import { CardList } from "./CardList";
 import { CardsSlider } from "./CardsSlider";
 
 export const CardsListSection = (props) => {
-  console.log(props);
   return (
     <section className={Styles["list-section"]}>
       {props.type === "slider" ? (
