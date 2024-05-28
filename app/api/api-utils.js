@@ -83,15 +83,15 @@ export const checkIfUserVoted = (game, userId) => {
 };
 
 export const vote = async (url, jwt, usersArray) => {
-  try {
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${jwt}`
-      },
-      body: JSON.stringify({ users: usersArray }) 
-    })
+    try {
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwt}`
+            },
+            body: JSON.stringify({ users: usersArray }),
+        })
 
     if (response.status !== 200) {
       throw new Error('Ошибка голосования')
