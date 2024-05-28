@@ -1,6 +1,6 @@
 "use client"
 import Styles from "./Game.module.css";
-import { getNormalizedGameDataById, isResponseOk, getJWT, getMe, removeJWT, checkIfUserVoted, vote } from "../../api/api-utils"
+import { getNormalizedGameDataById, isResponseOk, checkIfUserVoted, vote } from "../../api/api-utils"
 import { endpoints } from "../../api/config"
 import { GameNotFound } from "../../components/GameNotFound/GameNotFound";
 import { Preloader } from "../../components/Preloader/Preloader"
@@ -18,6 +18,7 @@ export default function GamePage(props) {
     async function fetchData() {
       setPreloaderVisible(true);
       const game = await getNormalizedGameDataById(endpoints.games, props.params.id);
+      console.log(game)
       isResponseOk(game) ? setGame(game) : setGame(null);
       setPreloaderVisible(false);
     }
